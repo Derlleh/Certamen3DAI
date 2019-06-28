@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<title>Alumnos</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+ 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		td,th{
+			text-align: center;
+		}
+		#texto_total{
+			text-align: right;
+			font-weight: bold;
+		}
+		.item{
+			text-align: left;
+		}
+		#customers {
+		  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		#customers td, #customers th {
+		  border: 1px solid #ddd;
+		  padding: 8px;
+		}
+
+		#customers tr:nth-child(even){background-color: #ddd	;}
+
+		#customers tr:hover {background-color: #ddd;}
+
+		#customers th {
+		  padding-top: 12px;
+		  padding-bottom: 12px;
+		  text-align: left;
+		  background-color: #4CAF50;
+		  color: white;
+		}
+	</style>
+</head>
+
+<body style="background-color: orange">
+
+	<div class="w3-container">
+		<h2 style="color: green"> <center> Alumnos Ingreso De Datos </center></h2>
+
+			 <table class="w3-table w3-white">
+
+		 	<!-- alumnos.html: rut, nombre, apellido, usuario, pass, carrera -->
+		 	<!-- select max (id) from usuario -->
+			<tr>
+				<td> Rut</td>
+				<td> <input type="text" id="rut"> </td>
+				<td><input type="button" id="agregar" class="btn btn-success" value="Agregar"></td>
+
+			</tr>
+			<tr>
+				<td> Nombre</td>
+				<td> <input type="text" id="nombre"> </td>
+			</tr>
+			<tr>
+				<td> Username</td>
+				<td> <input type="text" id="users"> </td> 
+				<td> <input type="button" id="modificar" class="btn btn-primary"  value="Modificar"></td>
+			</tr>
+			<tr>
+				<td> Contraseña </td>
+				<td> <input type="text" id="pass"> </td>
+
+			</tr>
+			<tr>
+				<td> Carrera </td>
+				<td> <input type="text" id="carrera"> </td>
+				<td> <input type="button" id="eliminar"  class="btn btn-danger"  value="Eliminar"> </td>
+			</tr>
+			
+			
+		</table>
+		<br><br><br>
+	
+		
+		
+		<br><br><br>
+		<div id="dvdetalle">
+			<table class="table">
+			<thead>
+			<tr class="danger">
+			<td> Rut </td>
+			<td> Nombre</td>
+			<td> Usuario</td>
+			<td> Password</td>
+			<td> Carrera </td>
+		</tr>
+		</thead>
+			<tr>
+			{% for alumn in alumnos%}
+			<td> {{alumn["rut"]}} </td>
+			{% for usuario in usuarios%}
+				
+			
+					<td> {{usuario["nombre"]}} </td>
+					<td> {{usuario["username"]}} </td>
+					<td> {{usuario["pass"]}} </td>
+			{% endfor%}
+			<td> {{alumn["carrera"]}} </td>
+			{% endfor%}
+			</tr>
+		</table>
+		</div>
+	</div>
+</body>	
+</html>
+
+<script>
+$("#agregar").click(function(){
+    $.post( "/actalumno",
+                { 	rut:      $("#rut").val(),
+                	nombre:   $("#nombre").val(),
+                	username: $("#users").val(),
+                	pass:    $("#pass").val(),
+                    carrera: $("#carrera").val(),
+
+                	operacion2: "grabar2"
+                },
+        function(data,status){
+          if (status=="success"){ 
+            $("#dvdetalle").html(data);
+          } else { 
+            mensaje("problema al actualizar el registro!");
+          }   
+        });
+  });
+console.log(rut);
+console.log(nombre);
+console.log(users);
+console.log(pass);
+console.log(carrera);
+$("#modificar").click(function(){
+	$.post(	"/actalumno", 
+			{	rut:      $("#rut").val(),
+                nombre:   $("#nombre").val(),
+                username: $("#users").val(),
+                pass: 	  $("#pass").val(),
+                carrera:  $("#carrera").val(),
+                operacion2: "modificar2"
+			},
+			function(data,status){
+	          if (status=="success"){ 
+	            $("#dvdetalle").html(data);
+	          } else { 
+	            mensaje("problema al actualizar el registro!");
+	          }   
+	        });
+});
+
+$("#eliminar").click(function(){
+	$.post(	"/actalumno", 
+			{	rut: $("#rut").val(),
+                operacion2: "eliminar2"
+			},
+			function(data,status){
+	          if (status=="success"){ 
+	            $("#dvdetalle").html(data);
+	          } else { 
+	            mensaje("problema al eliminar el registro!");
+	          }   
+	        });
+});
+
+</script>

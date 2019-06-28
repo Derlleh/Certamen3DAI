@@ -1,0 +1,16 @@
+	<table class="table">
+			<thead>
+		<tr class="danger">
+			<td> Rut </td>
+			<td> carrera </td>
+			<td> usuario </td>
+		</tr>
+	</thead>
+			{% for alumn in alumnos %}
+				<tr class="info">
+					<td> {{alumn["rut"]}} </td>
+					<td> {{alumn["carrera"]}} </td>
+					<td> {{alumn["id_usuario"]}} </td>
+					
+			{% endfor%}
+		</table>
